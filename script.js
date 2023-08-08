@@ -14,7 +14,7 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.7;
 
 class Sprite {
-  constructor({ position, velocity, color = "red", offset }) {
+  constructor({ position, velocity, color = "blue", offset }) {
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
@@ -100,7 +100,7 @@ const enemy = new Sprite({
     x: 0,
     y: 0,
   },
-  color: "blue",
+  color: "red",
   offset: {
     x: 50,
     y: 0,
@@ -177,15 +177,35 @@ const jump = function (char) {
     char.velocity.y = -20;
   }
 };
+// Determine winner
+const determineWinner = function ({ player, enemy, timerId, animateId }) {
+  window.cancelAnimationFrame(animateId);
+  clearTimeout(timerId);
+  resultDisplay.style.display = "flex";
+  if (player.health === enemy.health) {
+    resultDisplay.textContent = "Tie";
+  }
+  if (player.health < enemy.health) {
+    resultDisplay.textContent = "Enemy Wins!";
+  }
+  if (player.health > enemy.health) {
+    resultDisplay.textContent = "Player Wins!";
+  }
+};
 
 /// timer functionality
 let timer = 60;
+let timerId;
 const timerEle = document.getElementById("timer");
+const resultDisplay = document.getElementById("result");
 const decreaseTimer = function () {
   if (timer > 0) {
-    setTimeout(decreaseTimer, 1000);
+    timerId = setTimeout(decreaseTimer, 1000);
     timer--;
     timerEle.textContent = timer;
+  }
+  if (timer === 0) {
+    determineWinner({ player, enemy });
   }
 };
 decreaseTimer();
@@ -238,8 +258,9 @@ const colDetectEnemy = function () {
 };
 
 // animation loop
+let animateId;
 const animate = function () {
-  window.requestAnimationFrame(animate);
+  animateId = window.requestAnimationFrame(animate);
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
   player.update("green");
@@ -248,6 +269,10 @@ const animate = function () {
   moveEnemy();
   colDetectPlayer();
   colDetectEnemy();
+  // end game based on health
+  if (enemy.health === 0 || player.health === 0) {
+    determineWinner({ player, enemy, timerId, animateId });
+  }
 };
 
 animate();
