@@ -18,13 +18,15 @@ class Sprite {
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
+    this.width = 50;
     this.laskKey;
+    this.onScreen;
   }
 
   draw(fill) {
     const { x, y } = this.position;
     c.fillStyle = fill;
-    c.fillRect(x, y, 50, this.height);
+    c.fillRect(x, y, this.width, this.height);
   }
   update(fill) {
     this.draw(fill);
@@ -86,10 +88,14 @@ const keys = {
 
 const movePlayer = function () {
   player.velocity.x = 0;
-  if (keys.a.pressed && player.lastkey === "a") {
+  if (keys.a.pressed && player.lastkey === "a" && player.position.x > 0) {
     player.velocity.x = -5;
   }
-  if (keys.d.pressed && player.lastkey === "d") {
+  if (
+    keys.d.pressed &&
+    player.lastkey === "d" &&
+    player.position.x < canvas.width - player.width
+  ) {
     player.velocity.x = 5;
   }
 };
@@ -107,10 +113,18 @@ const moveEnemyAuto = function () {
 
 const moveEnemy = function () {
   enemy.velocity.x = 0;
-  if (keys.ArrowRight.pressed && enemy.lastkey === "ArrowRight") {
+  if (
+    keys.ArrowRight.pressed &&
+    enemy.lastkey === "ArrowRight" &&
+    enemy.position.x < canvas.width - enemy.width
+  ) {
     enemy.velocity.x = 5;
   }
-  if (keys.ArrowLeft.pressed && enemy.lastkey === "ArrowLeft") {
+  if (
+    keys.ArrowLeft.pressed &&
+    enemy.lastkey === "ArrowLeft" &&
+    enemy.position.x > 0
+  ) {
     enemy.velocity.x = -5;
   }
 };

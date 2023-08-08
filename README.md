@@ -21,3 +21,7 @@ Ready to Implement
 # Health Bar Interface
 
 # Game Timers and Game Over
+
+# refactor
+
+I would like to put all the code that has to do with key presses and listeners into its own file and maybe have a file just for collision and attack code... etc
