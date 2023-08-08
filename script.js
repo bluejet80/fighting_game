@@ -14,22 +14,37 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.7;
 
 class Sprite {
-  constructor({ position, velocity }) {
+  constructor({ position, velocity, color = "red" }) {
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
     this.width = 50;
     this.laskKey;
-    this.onScreen;
+    this.attackBox = {
+      position: this.position,
+      width: 100,
+      height: 50,
+    };
+    this.color = color;
   }
 
-  draw(fill) {
+  draw() {
+    const attackBoxPos = this.attackBox.position;
     const { x, y } = this.position;
-    c.fillStyle = fill;
+    c.fillStyle = this.color;
     c.fillRect(x, y, this.width, this.height);
+
+    // attackBox
+    c.fillStyle = "green";
+    c.fillRect(
+      attackBoxPos.x,
+      attackBoxPos.y,
+      this.attackBox.width,
+      this.attackBox.height
+    );
   }
-  update(fill) {
-    this.draw(fill);
+  update() {
+    this.draw();
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     if (this.position.y + this.height + this.velocity.y >= canvas.height) {
@@ -62,6 +77,7 @@ const enemy = new Sprite({
     x: 0,
     y: 0,
   },
+  color: "blue",
 });
 
 // keys object
@@ -135,6 +151,25 @@ const jump = function (char) {
   }
 };
 
+const colDetect = function () {
+  const attBoxRight = player.attackBox.position.x + player.attackBox.width;
+  const attBoxLeft = player.attackBox.position.x;
+  const enemyLeft = enemy.position.x;
+  const enemyRight = enemy.position.x + enemy.width;
+  const attBoxBottom = player.attackBox.position.y + player.attackBox.height;
+  const enemyTop = enemy.position.y;
+  const attBoxTop = player.attackBox.position.y;
+  const enemyBottom = enemy.position.y + enemy.height;
+  if (
+    attBoxRight >= enemyLeft &&
+    attBoxLeft <= enemyRight &&
+    attBoxBottom >= enemyTop &&
+    attBoxTop <= enemyBottom
+  ) {
+    console.log("hit!!");
+  }
+};
+
 // animation loop
 const animate = function () {
   window.requestAnimationFrame(animate);
@@ -144,6 +179,7 @@ const animate = function () {
   enemy.update("red");
   movePlayer();
   moveEnemy();
+  colDetect();
 };
 
 animate();
