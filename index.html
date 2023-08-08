@@ -4,10 +4,81 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      .main-container {
+        position: relative;
+        display: inline-block;
+      }
+      .health-container {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: 20px;
+      }
+      .health-bar-container {
+        position: relative;
+        height: 30px;
+        width: 100%;
+      }
+      .health-bar-bg-enemy {
+        background: yellow;
+        height: 30px;
+      }
+      .health-bar-bg-player {
+        background: yellow;
+        height: 30px;
+        width: 100%;
+      }
+
+      .health-bar-enemy {
+        position: absolute;
+        background: blue;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+      }
+      .health-bar-player {
+        position: absolute;
+        background: blue;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+      }
+      .timer {
+        background: red;
+        width: 100px;
+        height: 100px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 60px;
+      }
+    </style>
   </head>
   <body>
     <div class="header">This is the Top of the Page</div>
-    <div class="container">
+    <div class="main-container">
+      <div class="health-container">
+        <div
+          class="health-bar-container"
+          style="display: flex; justify-content: flex-end"
+        >
+          <div class="health-bar-bg-player"></div>
+          <div class="health-bar-player" id="player-health"></div>
+        </div>
+        <div class="timer" id="timer">10</div>
+        <div class="health-bar-container">
+          <div class="health-bar-bg-enemy"></div>
+          <div class="health-bar-enemy" id="enemy-health"></div>
+        </div>
+      </div>
       <canvas id="game"></canvas>
     </div>
     <div class="footer">This is the bottom of the page</div>

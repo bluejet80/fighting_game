@@ -14,18 +14,24 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.7;
 
 class Sprite {
-  constructor({ position, velocity, color = "red" }) {
+  constructor({ position, velocity, color = "red", offset }) {
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
     this.width = 50;
     this.laskKey;
     this.attackBox = {
-      position: this.position,
+      position: {
+        x: this.position.x,
+        y: this.position.y,
+      },
       width: 100,
       height: 50,
+      offset,
     };
     this.color = color;
+    this.isAttacking;
+    this.health = 100;
   }
 
   draw() {
@@ -35,16 +41,22 @@ class Sprite {
     c.fillRect(x, y, this.width, this.height);
 
     // attackBox
-    c.fillStyle = "green";
-    c.fillRect(
-      attackBoxPos.x,
-      attackBoxPos.y,
-      this.attackBox.width,
-      this.attackBox.height
-    );
+    if (this.isAttacking) {
+      c.fillStyle = "green";
+      c.fillRect(
+        attackBoxPos.x,
+        attackBoxPos.y,
+        this.attackBox.width,
+        this.attackBox.height
+      );
+    }
   }
   update() {
     this.draw();
+    //offset attackbox for enemy
+    this.attackBox.position.x = this.position.x - this.attackBox.offset.x;
+    this.attackBox.position.y = this.position.y;
+
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     if (this.position.y + this.height + this.velocity.y >= canvas.height) {
@@ -52,6 +64,13 @@ class Sprite {
     } else {
       this.velocity.y += gravity;
     }
+  }
+
+  attack() {
+    this.isAttacking = true;
+    setTimeout(() => {
+      this.isAttacking = false;
+    }, 100);
   }
 }
 
@@ -63,6 +82,10 @@ const player = new Sprite({
     y: 0,
   },
   velocity: {
+    x: 0,
+    y: 0,
+  },
+  offset: {
     x: 0,
     y: 0,
   },
@@ -78,6 +101,10 @@ const enemy = new Sprite({
     y: 0,
   },
   color: "blue",
+  offset: {
+    x: 50,
+    y: 0,
+  },
 });
 
 // keys object
@@ -151,22 +178,62 @@ const jump = function (char) {
   }
 };
 
-const colDetect = function () {
-  const attBoxRight = player.attackBox.position.x + player.attackBox.width;
-  const attBoxLeft = player.attackBox.position.x;
-  const enemyLeft = enemy.position.x;
-  const enemyRight = enemy.position.x + enemy.width;
-  const attBoxBottom = player.attackBox.position.y + player.attackBox.height;
-  const enemyTop = enemy.position.y;
-  const attBoxTop = player.attackBox.position.y;
-  const enemyBottom = enemy.position.y + enemy.height;
+/// timer functionality
+let timer = 60;
+const timerEle = document.getElementById("timer");
+const decreaseTimer = function () {
+  if (timer > 0) {
+    setTimeout(decreaseTimer, 1000);
+    timer--;
+    timerEle.textContent = timer;
+  }
+};
+decreaseTimer();
+
+/// collision detection
+
+const rectangularCollision = function ({ rectangle1, rectangle2 }) {
+  return (
+    rectangle1.attackBox.position.x + rectangle1.attackBox.width >=
+      rectangle2.position.x &&
+    rectangle1.attackBox.position.x <=
+      rectangle2.position.x + rectangle2.width &&
+    rectangle1.attackBox.position.y + rectangle1.attackBox.height >=
+      rectangle2.position.y &&
+    rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
+  );
+};
+
+const enemyHealth = document.getElementById("enemy-health");
+const playerHealth = document.getElementById("player-health");
+
+const colDetectPlayer = function () {
   if (
-    attBoxRight >= enemyLeft &&
-    attBoxLeft <= enemyRight &&
-    attBoxBottom >= enemyTop &&
-    attBoxTop <= enemyBottom
+    rectangularCollision({
+      rectangle1: player,
+      rectangle2: enemy,
+    }) &&
+    player.isAttacking
   ) {
+    player.isAttacking = false;
+    enemy.health -= 5;
+    enemyHealth.style.width = enemy.health + "%";
     console.log("hit!!");
+  }
+};
+
+const colDetectEnemy = function () {
+  if (
+    rectangularCollision({
+      rectangle1: enemy,
+      rectangle2: player,
+    }) &&
+    enemy.isAttacking
+  ) {
+    enemy.isAttacking = false;
+    player.health -= 5;
+    playerHealth.style.width = player.health + "%";
+    console.log("Player-hit!!");
   }
 };
 
@@ -179,7 +246,8 @@ const animate = function () {
   enemy.update("red");
   movePlayer();
   moveEnemy();
-  colDetect();
+  colDetectPlayer();
+  colDetectEnemy();
 };
 
 animate();
@@ -199,6 +267,11 @@ window.addEventListener("keydown", (event) => {
     case "w":
       jump(player);
       break;
+    case " ":
+      player.attack();
+      break;
+
+    // enemy movements
     case "ArrowRight":
       keys.ArrowRight.pressed = true;
       enemy.lastkey = "ArrowRight";
@@ -210,7 +283,11 @@ window.addEventListener("keydown", (event) => {
     case "ArrowUp":
       jump(enemy);
       break;
+    case "Control":
+      enemy.attack();
+      break;
   }
+  //console.log(event.key);
 });
 
 window.addEventListener("keyup", (event) => {

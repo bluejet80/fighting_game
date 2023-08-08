@@ -8,7 +8,11 @@ Velocity is to determine which direction your sprites should be moving when they
 
 Gravity is added to make sure that the players always fall down to the bottom of the game window and stop there.
 
+as long as the player is not at the bottom of the window, gravity is added in small increments to its downward velocity.
+
 To get your sprites moving you first need to create an animation loop.
+
+this is done with the window.requestAnimationFrame(animate);
 
 # Move Characters with event listeners
 
