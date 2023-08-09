@@ -63,7 +63,7 @@ const moveEnemy = function () {
 };
 
 const jump = function (char) {
-  if (char.position.y > canvas.height / 2) {
+  if (char.position.y > canvas.height / 3) {
     char.velocity.y = -20;
   }
 };
@@ -76,10 +76,10 @@ const determineWinner = function ({ player, enemy, timerId, animateId }) {
     resultDisplay.textContent = "Tie";
   }
   if (player.health < enemy.health) {
-    resultDisplay.textContent = "Enemy Wins!";
+    resultDisplay.textContent = "Player 2 Wins!";
   }
   if (player.health > enemy.health) {
-    resultDisplay.textContent = "Player Wins!";
+    resultDisplay.textContent = "Player 1 Wins!";
   }
 };
 
@@ -114,9 +114,6 @@ const rectangularCollision = function ({ rectangle1, rectangle2 }) {
   );
 };
 
-const enemyHealth = document.getElementById("enemy-health");
-const playerHealth = document.getElementById("player-health");
-
 // where player hits enemy
 
 const colDetectPlayer = function () {
@@ -131,7 +128,9 @@ const colDetectPlayer = function () {
     enemy.takeHit(10);
     player.isAttacking = false;
 
-    enemyHealth.style.width = enemy.health + "%";
+    gsap.to("#enemy-health", {
+      width: enemy.health + "%",
+    });
     //console.log("hit!!");
   }
 
@@ -153,7 +152,10 @@ const colDetectEnemy = function () {
   ) {
     player.takeHit(5);
     enemy.isAttacking = false;
-    playerHealth.style.width = player.health + "%";
+
+    gsap.to("#player-health", {
+      width: player.health + "%",
+    });
     //console.log("Player-hit!!");
   }
 

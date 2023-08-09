@@ -170,8 +170,10 @@ const animate = function () {
   c.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
   shop.update();
-  player.update("green");
-  enemy.update("red");
+  c.fillStyle = "rgba(255, 255, 255, 0.15)";
+  c.fillRect(0, 0, canvas.width, canvas.height);
+  player.update();
+  enemy.update();
   movePlayer();
   moveEnemy();
   colDetectPlayer();
