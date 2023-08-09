@@ -13,30 +13,51 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 0.7;
 
-class Sprite {
-  constructor({ position, imageSrc, scale = 1 }) {
-    this.position = position;
-    this.height = 150;
-    this.width = 50;
-    this.image = new Image();
-    this.image.src = imageSrc;
-    this.scale = scale;
-  }
+// create players
 
-  draw() {
-    c.drawImage(
-      this.image,
-      this.position.x,
-      this.position.y,
-      this.image.width * this.scale,
-      this.image.height * this.scale
-    );
-  }
+const player = new Fighter({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  velocity: {
+    x: 0,
+    y: 0,
+  },
+  offset: {
+    x: 0,
+    y: 0,
+  },
+  imageSrc: "./img/samuraiMack/Idle.png",
+  scale: 2.5,
+  framesMax: 8,
+  offset: {
+    x: 205,
+    y: 157,
+  },
+});
 
-  update() {
-    this.draw();
-  }
-}
+const enemy = new Fighter({
+  position: {
+    x: 500,
+    y: 0,
+  },
+  velocity: {
+    x: 0,
+    y: 0,
+  },
+  offset: {
+    x: 50,
+    y: 0,
+  },
+  imageSrc: "./img/kenji/Idle.png",
+  scale: 2.5,
+  framesMax: 4,
+  offset: {
+    x: 205,
+    y: 172,
+  },
+});
 
 // create images
 
@@ -55,6 +76,7 @@ const shop = new Sprite({
   },
   imageSrc: "./img/shop.png",
   scale: 3,
+  framesMax: 6,
 });
 
 // keys object

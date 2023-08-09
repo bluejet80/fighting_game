@@ -65,7 +65,7 @@ const determineWinner = function ({ player, enemy, timerId, animateId }) {
 };
 
 /// timer functionality
-let timer = 10;
+let timer = 60;
 let timerId;
 const timerEle = document.getElementById("timer");
 const resultDisplay = document.getElementById("result");
