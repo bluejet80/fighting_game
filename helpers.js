@@ -4,13 +4,22 @@ const movePlayer = function () {
   player.velocity.x = 0;
   if (keys.a.pressed && player.lastkey === "a" && player.position.x > 0) {
     player.velocity.x = -5;
-  }
-  if (
+    player.switchSprite("run");
+  } else if (
     keys.d.pressed &&
     player.lastkey === "d" &&
     player.position.x < canvas.width - player.width
   ) {
     player.velocity.x = 5;
+    player.switchSprite("run");
+  } else {
+    player.switchSprite("idle");
+  }
+
+  if (player.velocity.y < 0) {
+    player.switchSprite("jump");
+  } else if (player.velocity.y > 0) {
+    player.switchSprite("fall");
   }
 };
 
@@ -27,19 +36,29 @@ const moveEnemyAuto = function () {
 
 const moveEnemy = function () {
   enemy.velocity.x = 0;
+
   if (
     keys.ArrowRight.pressed &&
     enemy.lastkey === "ArrowRight" &&
     enemy.position.x < canvas.width - enemy.width
   ) {
     enemy.velocity.x = 5;
-  }
-  if (
+    enemy.switchSprite("run");
+  } else if (
     keys.ArrowLeft.pressed &&
     enemy.lastkey === "ArrowLeft" &&
     enemy.position.x > 0
   ) {
     enemy.velocity.x = -5;
+    enemy.switchSprite("run");
+  } else {
+    enemy.switchSprite("idle");
+  }
+
+  if (enemy.velocity.y < 0) {
+    enemy.switchSprite("jump");
+  } else if (enemy.velocity.y > 0) {
+    enemy.switchSprite("fall");
   }
 };
 
@@ -104,12 +123,17 @@ const colDetectPlayer = function () {
       rectangle1: player,
       rectangle2: enemy,
     }) &&
-    player.isAttacking
+    player.isAttacking &&
+    player.framesCurrent === 4
   ) {
     player.isAttacking = false;
     enemy.health -= 5;
     enemyHealth.style.width = enemy.health + "%";
     //console.log("hit!!");
+  }
+
+  if (player.isAttacking && player.framesCurrent === 4) {
+    player.isAttacking = false;
   }
 };
 
@@ -119,11 +143,16 @@ const colDetectEnemy = function () {
       rectangle1: enemy,
       rectangle2: player,
     }) &&
-    enemy.isAttacking
+    enemy.isAttacking &&
+    enemy.framesCurrent === 2
   ) {
     enemy.isAttacking = false;
     player.health -= 5;
     playerHealth.style.width = player.health + "%";
     //console.log("Player-hit!!");
+  }
+
+  if (enemy.isAttacking && enemy.framesCurrent === 2) {
+    enemy.isAttacking = false;
   }
 };

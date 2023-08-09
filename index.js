@@ -24,16 +24,41 @@ const player = new Fighter({
     x: 0,
     y: 0,
   },
-  offset: {
-    x: 0,
-    y: 0,
-  },
-  imageSrc: "./img/samuraiMack/Idle.png",
   scale: 2.5,
   framesMax: 8,
   offset: {
     x: 205,
     y: 157,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./img/samuraiMack/Idle.png",
+      framesMax: 8,
+    },
+    run: {
+      imageSrc: "./img/samuraiMack/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: "./img/samuraiMack/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imageSrc: "./img/samuraiMack/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imageSrc: "./img/samuraiMack/Attack1.png",
+      framesMax: 6,
+    },
+  },
+  attackBox: {
+    offset: {
+      x: -100,
+      y: 0,
+    },
+    width: 150,
+    height: 100,
   },
 });
 
@@ -46,16 +71,41 @@ const enemy = new Fighter({
     x: 0,
     y: 0,
   },
-  offset: {
-    x: 50,
-    y: 0,
-  },
-  imageSrc: "./img/kenji/Idle.png",
-  scale: 2.5,
   framesMax: 4,
+  scale: 2.5,
   offset: {
     x: 205,
     y: 172,
+  },
+  sprites: {
+    idle: {
+      imageSrc: "./img/kenji/Idle.png",
+      framesMax: 4,
+    },
+    run: {
+      imageSrc: "./img/kenji/Run.png",
+      framesMax: 8,
+    },
+    jump: {
+      imageSrc: "./img/kenji/Jump.png",
+      framesMax: 2,
+    },
+    fall: {
+      imageSrc: "./img/kenji/Fall.png",
+      framesMax: 2,
+    },
+    attack1: {
+      imageSrc: "./img/kenji/Attack1.png",
+      framesMax: 4,
+    },
+  },
+  attackBox: {
+    offset: {
+      x: 150,
+      y: 0,
+    },
+    width: 150,
+    height: 100,
   },
 });
 
