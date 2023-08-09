@@ -116,9 +116,6 @@ const keys = {
   d: {
     pressed: false,
   },
-  w: {
-    pressed: false,
-  },
   ArrowRight: {
     pressed: false,
   },
