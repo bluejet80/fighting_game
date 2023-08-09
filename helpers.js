@@ -69,7 +69,7 @@ const jump = function (char) {
 };
 // Determine winner
 const determineWinner = function ({ player, enemy, timerId, animateId }) {
-  window.cancelAnimationFrame(animateId);
+  //window.cancelAnimationFrame(animateId);
   clearTimeout(timerId);
   resultDisplay.style.display = "flex";
   if (player.health === enemy.health) {
@@ -95,7 +95,7 @@ const decreaseTimer = function () {
     timerEle.textContent = timer;
   }
   if (timer === 0) {
-    determineWinner({ player, enemy, animateId });
+    determineWinner({ player, enemy });
   }
 };
 decreaseTimer();
@@ -117,6 +117,8 @@ const rectangularCollision = function ({ rectangle1, rectangle2 }) {
 const enemyHealth = document.getElementById("enemy-health");
 const playerHealth = document.getElementById("player-health");
 
+// where player hits enemy
+
 const colDetectPlayer = function () {
   if (
     rectangularCollision({
@@ -126,8 +128,9 @@ const colDetectPlayer = function () {
     player.isAttacking &&
     player.framesCurrent === 4
   ) {
+    enemy.takeHit(10);
     player.isAttacking = false;
-    enemy.health -= 5;
+
     enemyHealth.style.width = enemy.health + "%";
     //console.log("hit!!");
   }
@@ -136,6 +139,8 @@ const colDetectPlayer = function () {
     player.isAttacking = false;
   }
 };
+
+//where enemy hits player
 
 const colDetectEnemy = function () {
   if (
@@ -146,8 +151,8 @@ const colDetectEnemy = function () {
     enemy.isAttacking &&
     enemy.framesCurrent === 2
   ) {
+    player.takeHit(5);
     enemy.isAttacking = false;
-    player.health -= 5;
     playerHealth.style.width = player.health + "%";
     //console.log("Player-hit!!");
   }
