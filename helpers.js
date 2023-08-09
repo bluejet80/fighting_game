@@ -65,7 +65,7 @@ const determineWinner = function ({ player, enemy, timerId, animateId }) {
 };
 
 /// timer functionality
-let timer = 60;
+let timer = 10;
 let timerId;
 const timerEle = document.getElementById("timer");
 const resultDisplay = document.getElementById("result");
@@ -76,7 +76,7 @@ const decreaseTimer = function () {
     timerEle.textContent = timer;
   }
   if (timer === 0) {
-    determineWinner({ player, enemy });
+    determineWinner({ player, enemy, animateId });
   }
 };
 decreaseTimer();
@@ -109,7 +109,7 @@ const colDetectPlayer = function () {
     player.isAttacking = false;
     enemy.health -= 5;
     enemyHealth.style.width = enemy.health + "%";
-    console.log("hit!!");
+    //console.log("hit!!");
   }
 };
 
@@ -124,6 +124,6 @@ const colDetectEnemy = function () {
     enemy.isAttacking = false;
     player.health -= 5;
     playerHealth.style.width = player.health + "%";
-    console.log("Player-hit!!");
+    //console.log("Player-hit!!");
   }
 };

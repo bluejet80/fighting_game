@@ -14,18 +14,48 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.7;
 
 class Sprite {
-  constructor({ position }) {
+  constructor({ position, imageSrc, scale = 1 }) {
     this.position = position;
     this.height = 150;
     this.width = 50;
+    this.image = new Image();
+    this.image.src = imageSrc;
+    this.scale = scale;
   }
 
-  draw() {}
+  draw() {
+    c.drawImage(
+      this.image,
+      this.position.x,
+      this.position.y,
+      this.image.width * this.scale,
+      this.image.height * this.scale
+    );
+  }
 
   update() {
     this.draw();
   }
 }
+
+// create images
+
+const background = new Sprite({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  imageSrc: "./img/background.png",
+});
+
+const shop = new Sprite({
+  position: {
+    x: 600,
+    y: 95,
+  },
+  imageSrc: "./img/shop.png",
+  scale: 3,
+});
 
 // keys object
 
@@ -50,6 +80,8 @@ const animate = function () {
   animateId = window.requestAnimationFrame(animate);
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
+  background.update();
+  shop.update();
   player.update("green");
   enemy.update("red");
   movePlayer();
@@ -95,7 +127,7 @@ window.addEventListener("keydown", (event) => {
     case "ArrowUp":
       jump(enemy);
       break;
-    case "Control":
+    case "Shift":
       enemy.attack();
       break;
   }
